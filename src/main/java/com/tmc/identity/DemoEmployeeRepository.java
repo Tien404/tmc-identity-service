@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class DemoEmployeeRepository implements EmployeeDirectory, EmployeeLookup {
+public class DemoEmployeeRepository implements EmployeeRepository {
     private final List<Employee> employees = List.of(
         new Employee(1, "Alex Morgan", 1, true),
         new Employee(2, "Jordan Lee", 2, true),

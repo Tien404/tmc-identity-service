@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api")
 public class IdentityController {
-    private final EmployeeDirectory employees;
+    private final EmployeeRepository employees;
     private final QRCodeGenerator generator;
     private final QRCodeValidator validator;
 
-    public IdentityController(EmployeeDirectory employees, QRCodeGenerator generator, QRCodeValidator validator) {
+    public IdentityController(EmployeeRepository employees, QRCodeGenerator generator, QRCodeValidator validator) {
         this.employees = employees;
         this.generator = generator;
         this.validator = validator;

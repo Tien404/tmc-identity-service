@@ -12,10 +12,10 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SignedTokenCodec implements TokenIssuer, TokenReader {
+public class TokenCodec {
     private final byte[] key = new byte[32];
 
-    public SignedTokenCodec() { new SecureRandom().nextBytes(key); }
+    public TokenCodec() { new SecureRandom().nextBytes(key); }
 
     public String issue(Employee employee, Instant expiresAt) {
         try {
@@ -47,4 +47,6 @@ public class SignedTokenCodec implements TokenIssuer, TokenReader {
             throw new IllegalArgumentException("Invalid QR code");
         }
     }
+
+    public record Credential(int employeeId, int factoryId, String tokenId, Instant expiresAt) {}
 }
