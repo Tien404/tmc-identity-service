@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class QRCodeValidator {
     private final EmployeeRepository employees;
-    private final TokenCodec tokens;
+    private final TokenReader tokenReader;
     private final Set<String> usedTokens = ConcurrentHashMap.newKeySet();
 
-    public QRCodeValidator(EmployeeRepository employees, TokenCodec tokens) {
+    public QRCodeValidator(EmployeeRepository employees, TokenReader tokenReader) {
         this.employees = employees;
-        this.tokens = tokens;
+        this.tokenReader = tokenReader;
     }
 
     public ValidationResult validate(String token, int factoryId) {
@@ -31,15 +31,15 @@ public class QRCodeValidator {
         return ValidationResult.allowed(employee);
     }
 
-    private Optional<TokenCodec.Credential> readCredential(String token) {
+    private Optional<Credential> readCredential(String token) {
         try {
-            return Optional.of(tokens.read(token));
+            return Optional.of(tokenReader.read(token));
         } catch (IllegalArgumentException e) {
             return Optional.empty();
         }
     }
 
-    private boolean isExpired(TokenCodec.Credential credential) {
+    private boolean isExpired(Credential credential) {
         return !credential.expiresAt().isAfter(Instant.now());
     }
 
@@ -47,7 +47,7 @@ public class QRCodeValidator {
         return employees.findById(employeeId).filter(Employee::active);
     }
 
-    private boolean isAllowedAtFactory(Employee employee, TokenCodec.Credential credential, int factoryId) {
+    private boolean isAllowedAtFactory(Employee employee, Credential credential, int factoryId) {
         return employee.factoryId() == factoryId && credential.factoryId() == factoryId;
     }
 

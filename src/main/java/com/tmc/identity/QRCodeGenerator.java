@@ -9,17 +9,17 @@ public class QRCodeGenerator {
     private static final Duration TOKEN_LIFETIME = Duration.ofSeconds(60);
 
     private final EmployeeRepository employees;
-    private final TokenCodec tokens;
+    private final TokenIssuer tokenIssuer;
 
-    public QRCodeGenerator(EmployeeRepository employees, TokenCodec tokens) {
+    public QRCodeGenerator(EmployeeRepository employees, TokenIssuer tokenIssuer) {
         this.employees = employees;
-        this.tokens = tokens;
+        this.tokenIssuer = tokenIssuer;
     }
 
     public QRCode generateQRCode(int employeeId) {
         var employee = findActiveEmployee(employeeId);
         var expiresAt = calculateExpiry();
-        return new QRCode(tokens.issue(employee, expiresAt), expiresAt);
+        return new QRCode(tokenIssuer.issue(employee, expiresAt), expiresAt);
     }
 
     private Employee findActiveEmployee(int employeeId) {

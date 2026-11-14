@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class QRCodeValidatorTests {
     private final EmployeeRepository employees = new DemoEmployeeRepository();
-    private final TokenCodec tokens = new TokenCodec();
-    private final QRCodeValidator validator = new QRCodeValidator(employees, tokens);
+    private final TokenCodec tokenCodec = new TokenCodec();
+    private final QRCodeValidator validator = new QRCodeValidator(employees, tokenCodec);
 
     private String token(int id, Instant expiresAt) {
-        return tokens.issue(employees.findById(id).orElseThrow(), expiresAt);
+        return tokenCodec.issue(employees.findById(id).orElseThrow(), expiresAt);
     }
 
     @Test void acceptsValidTokenOnlyOnce() {
