@@ -6,9 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class QRCodeValidatorTests {
     private final EmployeeRepository employees = new DemoEmployeeRepository();
-    private final TokenCodec tokens = new SignedTokenCodec();
-    private final QRCodeValidator validator =
-        new QRCodeValidator(new DynamicValidator(employees, tokens, new InMemoryUsedTokenStore()));
+    private final TokenCodec tokens = new TokenCodec();
+    private final QRCodeValidator validator = new QRCodeValidator(employees, tokens);
 
     private String token(int id, Instant expiresAt) {
         return tokens.issue(employees.findById(id).orElseThrow(), expiresAt);
@@ -23,7 +22,7 @@ class QRCodeValidatorTests {
     @Test void rejectsExpiredTamperedAndForeignTokens() {
         assertFalse(validator.validate(token(1, Instant.now().minusSeconds(1)), 1).allowed());
         assertFalse(validator.validate("invalid.token", 1).allowed());
-        var foreignToken = new SignedTokenCodec().issue(employees.findById(1).orElseThrow(), Instant.now().plusSeconds(60));
+        var foreignToken = new TokenCodec().issue(employees.findById(1).orElseThrow(), Instant.now().plusSeconds(60));
         assertFalse(validator.validate(foreignToken, 1).allowed());
     }
 

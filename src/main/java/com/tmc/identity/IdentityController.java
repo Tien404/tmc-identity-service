@@ -28,7 +28,7 @@ public class IdentityController {
     public QRCode generate(@PathVariable int id) { return generator.generateQRCode(id); }
 
     @PostMapping("/validation")
-    public ValidationResult validate(@Valid @RequestBody ValidationRequest request) {
+    public QRCodeValidator.ValidationResult validate(@Valid @RequestBody ValidationRequest request) {
         return validator.validate(request.token(), request.factoryId());
     }
 
