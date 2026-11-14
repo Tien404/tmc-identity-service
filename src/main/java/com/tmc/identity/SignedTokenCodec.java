@@ -5,7 +5,6 @@ import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
@@ -13,9 +12,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SignedTokenCodec implements TokenCodec {
-    private final byte[] key = new byte[32];
+    private final byte[] key;
 
-    public SignedTokenCodec() { new SecureRandom().nextBytes(key); }
+    public SignedTokenCodec(TokenSigningKey signingKey) { this.key = signingKey.bytes(); }
 
     public String issue(Employee employee, Instant expiresAt) {
         try {

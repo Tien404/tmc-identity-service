@@ -4,8 +4,6 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import java.util.List;
-import java.util.Map;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,10 +29,6 @@ public class IdentityController {
     public ValidationResult validate(@Valid @RequestBody ValidationRequest request) {
         return validator.validate(request.token(), request.factoryId());
     }
-
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public Map<String, String> invalid(IllegalArgumentException e) { return Map.of("message", e.getMessage()); }
 
     public record ValidationRequest(@NotBlank String token, @Positive int factoryId) {}
 }
