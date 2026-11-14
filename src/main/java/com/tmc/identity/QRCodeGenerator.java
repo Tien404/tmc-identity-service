@@ -5,10 +5,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class QRCodeGenerator {
-    private final EmployeeRepository employees;
-    private final TokenCodec tokens;
+    private final EmployeeLookup employees;
+    private final TokenIssuer tokens;
 
-    public QRCodeGenerator(EmployeeRepository employees, TokenCodec tokens) {
+    public QRCodeGenerator(EmployeeLookup employees, TokenIssuer tokens) {
         this.employees = employees;
         this.tokens = tokens;
     }

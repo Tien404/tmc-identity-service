@@ -12,7 +12,7 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SignedTokenCodec implements TokenCodec {
+public class SignedTokenCodec implements TokenIssuer, TokenReader {
     private final byte[] key = new byte[32];
 
     public SignedTokenCodec() { new SecureRandom().nextBytes(key); }
